@@ -1,11 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useState } from "react";
 
-import GoalItem from "./components/Goal-Item";
-import GoalInput from "./components/Goal-Input";
-import GoalTitle from "./components/Goal-Title";
+import { DefaultColors } from "./constants/colors";
+
 import ActionButtons from "./components/Action-Buttons";
+import GoalListContent from "./components/goals/Goal-List-Content";
+import GoalInput from "./components/goals/Goal-Input";
 
 export default function App() {
   // Modal state
@@ -13,7 +14,6 @@ export default function App() {
   // Goals state
   const [goalsList, setGoalsList] = useState([]);
 
-  // 
   function startAddGoalHandler() {
     setIsModalVisible(true);
   }
@@ -57,26 +57,10 @@ export default function App() {
           onCloseModal={closeAddGoalModal}
         />
 
-        <View style={styles.goalListContainer}>
-          <GoalTitle goalsList={goalsList} />
-          <FlatList
-            style={styles.goalList}
-            data={goalsList}
-            renderItem={(itemData) => {
-              return (
-                <GoalItem
-                  text={itemData.item.text}
-                  id={itemData.item.id}
-                  onDeleteItem={deleteGoalHandler}
-                />
-              );
-            }}
-            keyExtractor={(item, index) => {
-              return item.id;
-            }}
-            alwaysBounceVertical={false}
-          />
-        </View>
+        <GoalListContent
+          goalsList={goalsList}
+          onDeleteItem={deleteGoalHandler}
+        />
       </View>
     </>
   );
@@ -87,18 +71,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 15,
     flex: 1,
-    backgroundColor: '#1d2354',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: DefaultColors.background1,
   },
-  goalListContainer: {
-    flex: 1,
-    margin: 10,
-    padding: 10,
-    width: '100%'
-  },
-  goalList: {
-    borderTopWidth: 1,
-    borderColor: 'white',
-    paddingTop: 10
-  }
 });

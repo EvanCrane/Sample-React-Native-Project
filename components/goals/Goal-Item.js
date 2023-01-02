@@ -1,6 +1,9 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 
+import { DefaultColors } from '../../constants/colors';
+
 export default function GoalItem(props) {
+
     return (
         <View style={styles.goalItem}>
             <Pressable
@@ -15,15 +18,21 @@ export default function GoalItem(props) {
 
 const styles = StyleSheet.create({
     goalItem: {
-        margin: 8,
-        padding: 8,
+        margin: 10,
+        padding: 20,
         borderRadius: 6,
         backgroundColor: 'purple'
     },
     goalText: {
-        color: 'white'
+        color: DefaultColors.textLight
     },
     pressedItem: {
         opacity: 0.5
+    },
+    noGoals: {
+
+    },
+    noGoalsImg: {
+
     }
 });

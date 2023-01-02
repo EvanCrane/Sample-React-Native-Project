@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { StyleSheet, View, TextInput, Modal, Image, Text, KeyboardAvoidingView, ScrollView, useWindowDimensions } from 'react-native';
-import ActionButtons from './Action-Buttons';
+
+import { DefaultColors } from '../../constants/colors';
+import ActionButtons from '../Action-Buttons';
 
 export default function GoalInput(props) {
     // Input text state
@@ -49,7 +51,7 @@ export default function GoalInput(props) {
                         <View style={styles.titleView}>
                             <Image
                                 style={styles.image}
-                                source={require('../assets/images/check.png')}
+                                source={require('../../assets/images/check.png')}
                             />
                             <Text style={styles.text}>{"Keep Track of Your Goals!"}</Text>
                         </View>
@@ -77,8 +79,8 @@ export default function GoalInput(props) {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor: '#1d2354',
-        flex: 1
+        flex: 1,
+        backgroundColor: DefaultColors.background1,
     },
     inputContainer: {
         justifyContent: "space-evenly",
@@ -86,9 +88,9 @@ const styles = StyleSheet.create({
     },
     textInput: {
         borderWidth: 1,
-        borderColor: 'white',
-        backgroundColor: 'white',
-        color: 'black',
+        borderColor: DefaultColors.borderLight,
+        backgroundColor: DefaultColors.backgroundLight1,
+        color: DefaultColors.textDark,
         fontSize: 18,
         padding: 10,
         width: '75%'
@@ -108,12 +110,12 @@ const styles = StyleSheet.create({
         margin: 20,
     },
     text: {
-        color: 'white',
+        color: DefaultColors.textLight,
         fontSize: 24
     },
     warningText: {
         marginTop: 20,
-        color: 'red',
+        color: DefaultColors.warning,
         fontSize: 26
     }
 });
