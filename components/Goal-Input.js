@@ -1,62 +1,119 @@
 import { useState } from 'react';
-import { StyleSheet, View, TextInput, Button } from 'react-native';
+import { StyleSheet, View, TextInput, Modal, Image, Text, KeyboardAvoidingView, ScrollView, useWindowDimensions } from 'react-native';
+import ActionButtons from './Action-Buttons';
 
 export default function GoalInput(props) {
     // Input text state
     const [enteredGoalText, setEnteredGoalText] = useState('');
+    // Warning text state
+    const [warningText, setWarningText] = useState('');
+    // Calculate margin top distance
+    const { width, height } = useWindowDimensions();
+    const marginTopDistance = height < 380 ? 30 : 150;
+
+
     // Handler for text changes to the input
     function goalInputHandler(enteredText) {
-        setEnteredGoalText(enteredText);
+        if (enteredText) {
+            setWarningText('');
+            setEnteredGoalText(enteredText);
+        } else {
+            setWarningText('Please Enter a Valid Goal');
+        }
     }
-    // Handler for adding new goal. Clear input text after adding goal
+    // Handler for adding new goal. 
+    // Clear input text after adding goal
+    // Close modal after inputting goal
     function addGoalHandler() {
-        props.onAddGoal(enteredGoalText);
-        setEnteredGoalText('');
+        if (enteredGoalText) {
+            props.onAddGoal(enteredGoalText);
+            setEnteredGoalText('');
+            onCloseModalHandler();
+        } else {
+            setWarningText('Please Enter a Valid Goal');
+        }
     }
-    // Handler for clearing all goals
-    function clearGoalsHandler() {
-        props.onClearGoals();
+    // Close Modal Handler
+    function onCloseModalHandler() {
+        props.onCloseModal();
     }
 
     return (
-        <View style={styles.inputContainer}>
-            <TextInput
-                placeholder="My goals:"
-                style={styles.textInput}
-                onChangeText={goalInputHandler}
-                value={enteredGoalText}
-                clearTextOnFocus
-            />
-            <View>
-                <Button
-                    title="Add Goal"
-                    color='blue'
-                    onPress={addGoalHandler}
-                />
-                <Button
-                    title="Clear Goals"
-                    color='red'
-                    onPress={clearGoalsHandler}
-                />
-            </View>
-        </View>
+        <Modal
+            visible={props.visible}
+            animationType="slide"
+        >
+            <ScrollView style={styles.screen}>
+                <KeyboardAvoidingView style={styles.screen} behavior="position">
+                    <View style={[styles.inputContainer, { marginTop: marginTopDistance }]}>
+                        <View style={styles.titleView}>
+                            <Image
+                                style={styles.image}
+                                source={require('../assets/images/check.png')}
+                            />
+                            <Text style={styles.text}>{"Keep Track of Your Goals!"}</Text>
+                        </View>
+                        <TextInput
+                            placeholder="Add New Goal"
+                            style={styles.textInput}
+                            onChangeText={goalInputHandler}
+                            value={enteredGoalText}
+                            clearTextOnFocus
+                        />
+
+                        <ActionButtons
+                            primaryButtonTitle='Add Goal'
+                            primaryButtonOnPress={addGoalHandler}
+                            secondaryButtonTitle='Cancel'
+                            secondaryButtonOnPress={onCloseModalHandler}
+                        />
+                        <Text style={styles.warningText}>{warningText}</Text>
+                    </View>
+                </KeyboardAvoidingView>
+            </ScrollView>
+        </Modal>
     );
 };
 
 const styles = StyleSheet.create({
+    screen: {
+        backgroundColor: '#1d2354',
+        flex: 1
+    },
     inputContainer: {
-        flex: 1,
-        flexDirection: "row",
         justifyContent: "space-evenly",
         alignItems: 'center',
-        marginBottom: 24,
-        borderBottomWidth: 1,
-        borderBottomColor: 'black'
     },
     textInput: {
         borderWidth: 1,
-        borderColor: 'grey',
+        borderColor: 'white',
+        backgroundColor: 'white',
+        color: 'black',
+        fontSize: 18,
         padding: 10,
         width: '75%'
     },
+    buttonView: {
+        flexDirection: 'row',
+        margin: 20
+    },
+    titleView: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    image: {
+        width: 100,
+        height: 100,
+        margin: 20,
+    },
+    text: {
+        color: 'white',
+        fontSize: 24
+    },
+    warningText: {
+        marginTop: 20,
+        color: 'red',
+        fontSize: 26
+    }
 });
